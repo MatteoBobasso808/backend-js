@@ -46,8 +46,7 @@ app.get('/api/v1/languages', (req, res) => {
 })
 
 app.get('/api/v1/languages/:id', (req, res) => {
-    const id = req.params.id
-    const language = languages.find(element => element.id === parseInt(id))
+    const language = languages.find(element => element.id === parseInt(req.params.id))
     if(language === undefined){
         res.status(404).send('<h1>Language not found<h1/>')
         return
@@ -61,14 +60,14 @@ app.post('/api/v1/languages', (req, res) => {
         res.status(404).send('<h1>Te falta completar un campo<h1/>')
         return
     }
-    
+
     if(req.get("Authentication") === undefined){
-        req.sendStatus(401)
+        res.sendStatus(401)
         return
     }
 
     if(req.get("Authentication") !== "manu"){
-        req.sendStatus(403)
+        res.sendStatus(403)
         return
     }
 
@@ -81,6 +80,42 @@ app.post('/api/v1/languages', (req, res) => {
     res.sendStatus(201)
 })
 
+app.delete('/api/v1/languages/:id', (req, res) => {
+    if(req.get("Authentication") === undefined){
+        res.sendStatus(401)
+        return
+    }
+
+    if(req.get("Authentication") !== "manu"){
+        res.sendStatus(403)
+        return
+    }
+
+    const language = languages.find(element => element.id === parseInt(req.params.id))
+    if(language === undefined){
+        res.sendStatus(404)
+        return
+    } else {
+        languages = languges.filter((elemnt) => element.id !== language.id)
+        res.sendStatus(201)
+    }
+})
+
+
+/* app.put('/api/v1/languages/:id',(req, res) => {
+            if(req.get("Authentication") === undefined){
+        res.sendStatus(401)
+        return
+    }
+
+    if(req.get("Authentication") !== "manu"){
+        res.sendStatus(403)
+        return
+    }
+
+    const language = languages.find(element => element.id === parseInt(req.params.id))
+    })
+*/
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
