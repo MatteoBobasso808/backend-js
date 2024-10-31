@@ -39,7 +39,7 @@ app.get('/', (req, res) => {
     res.send("")
 })
 
-// app.use(express.json()) --> acepta json como entrada
+app.use(express.json()) // --> acepta json como entrada
 
 app.get('/api/v1/languages', (req, res) => {
     res.send(languages)
@@ -49,11 +49,36 @@ app.get('/api/v1/languages/:id', (req, res) => {
     const id = req.params.id
     const language = languages.find(element => element.id === parseInt(id))
     if(language === undefined){
-        res.status(404).send("Language not found")
+        res.status(404).send('<h1>Language not found<h1/>')
         return
     } else {
         res.send(language)
     }
+})
+
+app.post('/api/v1/languages', (req, res) => {
+    if(req.body.name === undefined || req.body.creation_date === undefined || req.body.last_version === undefined){
+        res.status(404).send('<h1>Te falta completar un campo<h1/>')
+        return
+    }
+    
+    if(req.get("Authentication") === undefined){
+        req.sendStatus(401)
+        return
+    }
+
+    if(req.get("Authentication") !== "manu"){
+        req.sendStatus(403)
+        return
+    }
+
+    languages.push({
+        id: languages[languages.length - 1].id + 1,
+        name: req.body.name,
+        creation_date: req.body.creation_date,
+        last_version: req.body.last_version
+    })
+    res.sendStatus(201)
 })
 
 app.listen(port, () => {
