@@ -117,9 +117,12 @@ app.put('/api/v1/languages/:id',(req, res) => {
     if(language === undefined){
         res.sendStatus(404)
         return
-    } else {
-        
     }
+    
+    const { name, creation_date, last_version } = req.body;
+    if (name) language.name = name;
+    if (creation_date) language.creation_date = creation_date;
+    if (last_version) language.last_version = last_version;
 })
 
 app.listen(port, () => {
