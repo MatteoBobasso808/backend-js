@@ -102,8 +102,8 @@ app.delete('/api/v1/languages/:id', (req, res) => {
 })
 
 
-/* app.put('/api/v1/languages/:id',(req, res) => {
-            if(req.get("Authentication") === undefined){
+app.put('/api/v1/languages/:id',(req, res) => {
+    if(req.get("Authentication") === undefined){
         res.sendStatus(401)
         return
     }
@@ -114,8 +114,14 @@ app.delete('/api/v1/languages/:id', (req, res) => {
     }
 
     const language = languages.find(element => element.id === parseInt(req.params.id))
-    })
-*/
+    if(language === undefined){
+        res.sendStatus(404)
+        return
+    } else {
+        
+    }
+})
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
