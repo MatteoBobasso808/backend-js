@@ -123,6 +123,8 @@ app.put('/api/v1/languages/:id',(req, res) => {
     if (name) language.name = name;
     if (creation_date) language.creation_date = creation_date;
     if (last_version) language.last_version = last_version;
+
+    res.json(language);
 })
 
 app.listen(port, () => {
