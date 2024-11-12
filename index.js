@@ -113,16 +113,15 @@ app.put('/api/v1/languages/:id',(req, res) => {
         return
     }
 
-    const language = languages.find(element => element.id === parseInt(req.params.id))
-    if(language === undefined){
+    const language_index = languages.findIndex(element => element.id === parseInt(req.params.id))
+    if(language_index === -1){
         res.sendStatus(404)
         return
     }
     
-    const { name, creation_date, last_version } = req.body;
-    if (name) language.name = name;
-    if (creation_date) language.creation_date = creation_date;
-    if (last_version) language.last_version = last_version;
+    languages[language_index].name = req.body.name ?? languages[language_index].name
+    languages[language_index].creation_date = req.body.creation_date ?? languages[language_index].creation_date
+    languages[language_index].last_version = req.body.last_version ?? languages[language_index].last_version
 
     res.json(language);
 })
